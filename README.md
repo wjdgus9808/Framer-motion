@@ -12,3 +12,21 @@ Element의 최종 상태
 자식 애니메이션까지 컨트롤 할 수 있게 해줌
 부모 Var의 prop을 자식이 상속받기 때문에
 child var의 prop의 이름도 부모랑 똑같이해야함
+
+dragConstraints
+허용된 드래그 가능 영역에 제약 조건을 적용합니다.
+
+dragSnapToOrigin
+true인 경우 드래그 가능한 요소는 놓을 때 중심/원점으로 다시 애니메이션됩니다.
+
+dragElastic
+제한된 바깥을 벗어날 수 있는 이동 정도입니다.
+
+MotionValue
+motio값을 트래킹 할 수 있게해줌 motionvalue가 바뀌어도 컴포넌트는 리랜더링 되지않음
+
+useMotionValue
+.get() .set() .onChange() 등 사용가능
+
+useTransform
+값을 받아 원하는 출력값을 받음
