@@ -16,23 +16,20 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
   background: linear-gradient(135deg, rgb(238, 0, 153), rgb(221, 0, 238));
 `;
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Circle = styled(motion.div)`
+  background-color: #00a5ff;
+  height: 100px;
+  width: 100px;
+
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 const Box = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+
   width: 200px;
   height: 200px;
-  position: absolute;
-  top: 1px;
   background-color: rgba(255, 255, 255);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
@@ -78,30 +75,23 @@ const box = {
 };
 
 function App() {
-  const [showing, setShowing] = useState(1);
-  const [back, setBack] = useState(false);
-  const nextPlease = () => {
-    setBack(false);
-    setShowing((prev) => (showing === 10 ? 10 : prev + 1));
-  };
-  const prevPlease = () => {
-    setBack(true);
-    setShowing((prev) => (showing === 1 ? 1 : prev - 1));
-  };
+  const [clicked, setClicked] = useState(false);
+  const toggleClicked = () => setClicked((prev) => !prev);
   return (
-    <Wrapper>
-      <button onClick={nextPlease}>next</button>
-      <button onClick={prevPlease}>prev</button>
-      <AnimatePresence custom={back}>
-        <Box
-          custom={back}
-          variants={box}
-          initial="entry"
-          animate="center"
-          exit="exit"
-          key={showing}
-        >
-          {showing}
+    <Wrapper onClick={toggleClicked}>
+      <AnimatePresence>
+        {/*같은layoutId를 주면 두개의 Circle이 연결되도록 해줌 */}
+        <Box>
+          {/* css로인한 style변화에 animation을 줌 */}
+          {!clicked ? (
+            <Circle style={{ borderRadius: "50%" }} layoutId="1"></Circle>
+          ) : null}
+        </Box>
+        <Box>
+          {/* css로인한 style변화에 animation을 줌 */}
+          {clicked ? (
+            <Circle style={{ borderRadius: "0%" }} layoutId="1"></Circle>
+          ) : null}
         </Box>
       </AnimatePresence>
     </Wrapper>

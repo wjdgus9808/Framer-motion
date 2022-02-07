@@ -44,3 +44,10 @@ custom은 variants에 데이터를 보낼수있게해줌 custom쓰려면 variant
 
 exitBeforeEnter
 true로 설정하면 AnimatePresence는 한 번에 하나의 컴포넌트만 랜더링합니다.
+
+Syncing layout animations
+모션 컴포넌트의 layout prop은 레이아웃이 변할 때마다, 자동으로 애니메이션을 적용합니다.
+https://www.framer.com/docs/animate-shared-layout/#syncing-layout-animations
+
+Animate between components
+동일한 layoutId를 공유하는 컴포넌트 간에 애니메이션을 적용하는 데 사용할 수 있습니다.
