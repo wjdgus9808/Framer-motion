@@ -1,12 +1,20 @@
 import styled from "styled-components";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
-const Wrapper = styled.div`
-  height: 100vh;
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+  useViewportScroll,
+} from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+const Wrapper = styled(motion.div)`
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgb(238, 0, 153), rgb(221, 0, 238));
 `;
 const BiggerBox = styled.div`
   width: 600px;
@@ -18,53 +26,84 @@ const BiggerBox = styled.div`
   align-items: center;
 `;
 const Box = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 200px;
   height: 200px;
+  position: absolute;
+  top: 1px;
   background-color: rgba(255, 255, 255);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
-const Circle = styled(motion.div)`
-  background-color: white;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  place-self: center;
-`;
+
 const boxVariants = {
-  hover: { scale: 1.5, rotateZ: 90 },
-  click: { scale: 1, borderRadius: "100px" },
+  initial: {
+    opacity: 0,
+    scale: 0,
+  },
+  center: {
+    opacity: 1,
+    scale: 1,
+    rotateZ: 360,
+  },
+  leaving: {
+    opacity: 0,
+    scale: 0,
+    y: 20,
+  },
+};
+const box = {
+  entry: (isBack: boolean) => {
+    //이 argument는 custom props로부터 옴
+    return { x: isBack ? -500 : 500, opacitiy: 0, scale: 0 };
+  },
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1,
+    },
+  },
+  exit: (isBack: boolean) => ({
+    x: isBack ? 500 : -500,
+    opacity: 0,
+    scale: 0,
+    transition: {
+      duration: 1,
+    },
+  }),
 };
 
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const potato = useTransform(x, [-800, 0, 800], [2, 1, 0.1]);
-  useEffect(() => {
-    console.log("ho");
-    // potato.onChange(() => console.log(x.get()));
-  }, [x]);
+  const [showing, setShowing] = useState(1);
+  const [back, setBack] = useState(false);
+  const nextPlease = () => {
+    setBack(false);
+    setShowing((prev) => (showing === 10 ? 10 : prev + 1));
+  };
+  const prevPlease = () => {
+    setBack(true);
+    setShowing((prev) => (showing === 1 ? 1 : prev - 1));
+  };
   return (
     <Wrapper>
-      <BiggerBox ref={biggerBoxRef}>
+      <button onClick={nextPlease}>next</button>
+      <button onClick={prevPlease}>prev</button>
+      <AnimatePresence custom={back}>
         <Box
-          style={{ x: x, scale: potato }}
-          drag
-          dragElastic={0.5}
-          dragSnapToOrigin
-          dragConstraints={biggerBoxRef}
-          variants={boxVariants}
-          //drag할때 애니메이션으로 주려면 rgb나rgba값으로
-          whileHover="hover"
-          whileTap="click"
+          custom={back}
+          variants={box}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={showing}
         >
-          {/* Chid는 기본적으로 부모의 Variants의 prop(initail,animate등)을 상속받음 */}
-          {/* 따라서 Child의 Var설정할때 prop이름을 동일하게 해야함 */}
+          {showing}
         </Box>
-      </BiggerBox>
+      </AnimatePresence>
     </Wrapper>
   );
 }
