@@ -50,4 +50,4 @@ Syncing layout animations
 https://www.framer.com/docs/animate-shared-layout/#syncing-layout-animations
 
 Animate between components
-동일한 layoutId를 공유하는 컴포넌트 간에 애니메이션을 적용하는 데 사용할 수 있습니다.
+동일한 layoutId(string)를 공유하는 컴포넌트 간에 애니메이션을 적용하는 데 사용할 수 있습니다.
